@@ -35,6 +35,3 @@ We fine-tuned a BERT-based classifier to detect hallucinated tokens:
 - **Frontend**: React, Material-UI
 - **Backend**: Node.js, Express, MongoDB
 - **ML**: Transformers (Huggingface), BERT, matplotlib, pandas
-
-## 📁 Project Structure
-. ├── src/ # Codebase ├── data/ # Input CSVs ├── results/ # Output predictions ├── frontend/ # React app ├── presentation/ # Final presentation
