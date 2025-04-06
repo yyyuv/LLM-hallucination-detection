@@ -23,6 +23,9 @@ Users were shown:
 
 We measured whether hallucinated or hedged tokens affected user confidence and accuracy.
 
+The experiment's URL: https://nlp-project-bgu.com/
+
+
 ## 🧠 Model
 
 We fine-tuned a BERT-based classifier to detect hallucinated tokens:
