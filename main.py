@@ -1,13 +1,10 @@
 import pandas as pd
 import ast
-# import numpy as np
 from transformers import AutoProcessor
-# from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 import matplotlib.pyplot as plt
 from transformers import BertTokenizer
 from itertools import zip_longest
 import os.path
-
 
 # Load the processor
 processor = AutoProcessor.from_pretrained('llava-hf/llava-1.5-7b-hf')
@@ -15,7 +12,6 @@ tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
 # Set the threshold and small epsilon value
 epsilon = 1
-
 
 # Function to parse logits from the combined columns
 def parse_logits(row):
@@ -78,9 +74,8 @@ def word_probs_from_tokens(tokens_lists_grouped_by_words, logits_list):
         token_index += len(token_group)
     return words_probs_by_order
 
-
 # Read the CSV file
-df = pd.read_csv(os.path.join(os.path.dirname(__file__), "Ohad's LLM-uncertainty - Sheet1.csv"))
+df = pd.read_csv(os.path.join(os.path.dirname(__file__), "Data"))
 
 # Combine logits columns
 df = df.dropna(subset=['logits'])
@@ -106,7 +101,6 @@ for index, row in df.iterrows():
         print(f'ERROR 2 [{index}]: {type(hallucination) is not str}, {type(logits_list) is not list}, {len(logits_list)}')
         continue
     tokens = processor.tokenizer.tokenize(description)
-    # tokens = tokenizer(description, padding=True, truncation=True, is_split_into_words=True)
     if len(tokens) != len(logits_list):
         print(f'ERROR 3 [{index}]: {len(tokens)} != {len(logits_list)}, {ends_with_space}')
         zipped = list(zip_longest(tokens, logits_list))
@@ -121,7 +115,6 @@ for index, row in df.iterrows():
 
     words_probs_by_order = word_probs_from_tokens(tokens_lists_grouped_by_words, logits_list)
 
-    # predictions_by_order = [True if word_prob < threshold else False for word_prob in words_probs_by_order]
 
     if len(words_by_order) != len(words_probs_by_order) or len(words_by_order) != len(labels_by_order):
         print(f"ERROR 4 [{index}]: {len(words_by_order)}, {len(words_probs_by_order)}, {len(labels_by_order)}")
@@ -134,37 +127,6 @@ for index, row in df.iterrows():
     })
 
 results_df = pd.DataFrame(results)
-# words = results_df["words"].tolist()
-# labels = results_df["labels"].tolist()
-# probs = results_df["probs"].tolist()
-results_df.to_csv(os.path.join(os.path.dirname(__file__), "nlp-results-df-yuval.csv"))
+results_df.to_csv(os.path.join(os.path.dirname(__file__), "nlp-results-df.csv"))
 print("Done")
 
-
-# all_true_labels = []
-# all_predictions = []
-#
-# for index, row in results_df.iterrows():
-#     all_true_labels.extend(row['true_labels'])
-#     all_predictions.extend(row['predictions'])
-
-# accuracy = accuracy_score(all_true_labels, all_predictions)
-# precision, recall, f1, _ = precision_recall_fscore_support(all_true_labels, all_predictions, average='binary')
-#
-# threshold_to_accuracy[threshold] = accuracy
-# threshold_to_f1[threshold] = f1
-
-# Plotting accuracy and F1 score
-# thresholds = list(threshold_to_accuracy.keys())
-# accuracies = list(threshold_to_accuracy.values())
-# f1_scores = list(threshold_to_f1.values())
-#
-# plt.figure(figsize=(10, 6))
-# plt.plot(thresholds, accuracies, label='Accuracy', color='blue')
-# plt.plot(thresholds, f1_scores, label='F1 Score', color='green')
-# plt.xlabel('Threshold')
-# plt.ylabel('Score')
-# plt.title('Accuracy and F1 Score by Threshold')
-# plt.legend()
-# plt.grid(True)
-# plt.show()
