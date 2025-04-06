@@ -31,7 +31,7 @@ The experiment's URL: https://nlp-project-bgu.com/
 We fine-tuned a BERT-based classifier to detect hallucinated tokens:
 - Inputs: LLaVA descriptions + token-level logits.
 - Output: Binary hallucination prediction for each token.
-- Achieved F1 ≈ 0.59
+- Achieved F1 ≈ 0.59 compared to F1 ≈ 0.22 of baseline model 
 
 ## 🛠️ Tech Stack
 
