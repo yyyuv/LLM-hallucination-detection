@@ -1,14 +1,17 @@
 import pandas as pd
 import ast
-from transformers import AutoProcessor
+import torch
+from transformers import AutoProcessor, LlavaForConditionalGeneration
+from transformers import LlamaTokenizer
 import matplotlib.pyplot as plt
 from transformers import BertTokenizer
 from itertools import zip_longest
 import os.path
 
 # Load the processor
-processor = AutoProcessor.from_pretrained('llava-hf/llava-1.5-7b-hf')
+processor_id = 'llava-hf/llava-1.5-7b-hf'
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+processor = AutoProcessor.from_pretrained(processor_id)
 
 # Set the threshold and small epsilon value
 epsilon = 1
@@ -75,7 +78,7 @@ def word_probs_from_tokens(tokens_lists_grouped_by_words, logits_list):
     return words_probs_by_order
 
 # Read the CSV file
-df = pd.read_csv(os.path.join(os.path.dirname(__file__), "Data"))
+df = pd.read_csv(os.path.join(os.path.dirname(__file__), "Data.csv"))
 
 # Combine logits columns
 df = df.dropna(subset=['logits'])
